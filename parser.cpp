@@ -4,8 +4,8 @@ namespace cat
 {
     auto parser::parse() -> void
     {
-        int max_null = 20;
-        int null_count = 0;
+        int max_null    = 20;
+        int null_count  = 0;
 
         while (has_next())
         {
@@ -20,8 +20,6 @@ namespace cat
 
     auto parser::parse_statement() -> node *
     {
-        // Check for statements
-
         auto next = peek();
 
         if (next.type == token_type::TOKEN_NEWLINE)
@@ -32,9 +30,6 @@ namespace cat
 
         if (next.type == token_type::TOKEN_VARIABLE)
         {
-
-            // Assignment Expressions
-
             auto next_next = peek_next(1);
 
             if ((next_next->type == token_type::TOKEN_OPERATOR) && next_next->value == "=")
@@ -43,8 +38,6 @@ namespace cat
                 return result_tree;
             }
         }
-
-        // Call Expression Statement
 
         if (next.type == token_type::TOKEN_CALL)
             return parse_call_expression();
@@ -156,18 +149,11 @@ namespace cat
         }
 
         if (token.type == token_type::TOKEN_VARIABLE) {
-            // assignment_node *return_node = new assignment_node(token.value, 0);
+
             variable_node *return_node = new variable_node(token.value);
             return return_node;
+
         }
-        // {
-
-        //     auto right = parse_statement();
-
-        //     assignment_node *return_node = new assignment_node(token.value, 0);
-        //     return return_node;
-
-        // }
 
         return nullptr;
     }
@@ -195,8 +181,8 @@ namespace cat
 
             consume();
 
-            argument_node *node = new argument_node(arg);
-            call_expression_node *return_node = new call_expression_node(call_statement_name, node);
+            argument_node *node                 = new argument_node(arg);
+            call_expression_node *return_node   = new call_expression_node(call_statement_name, node);
 
             return return_node;
         }

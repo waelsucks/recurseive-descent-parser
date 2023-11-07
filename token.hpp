@@ -29,8 +29,8 @@ namespace cat
 
     public:
         std::string value;
-        token_type type;
+        token_type  type;
     };
-}; // namespace cat
+}
 
 #endif // TOKEN_H_

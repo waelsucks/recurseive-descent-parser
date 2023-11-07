@@ -23,7 +23,6 @@ namespace cat
 
         std::string value;
 
-        // Integer
         if (is_integer())
         {
             while (has_next() && is_integer())
@@ -32,11 +31,9 @@ namespace cat
             return token(token_type::TOKEN_INTEGER, value);
         }
 
-        // Whitespace
         if (is_whitespace())
             consume_space();
 
-        // Operator
         if (is_operator())
         {
             value += peak_consume();
@@ -47,8 +44,6 @@ namespace cat
 
             if (value != "-")
                 throw std::runtime_error("ERROR: what.");
-
-            // value = peak_consume();
 
             if (is_integer())
             {
@@ -61,7 +56,6 @@ namespace cat
             }
         }
 
-        // Punctuator
         if (is_punctuator())
         {
             auto p = peek();
@@ -72,7 +66,6 @@ namespace cat
                 return token(token_type::TOKEN_P_R, value);
         }
 
-        // Variable
         if (is_variable())
         {
             while (has_next() && is_variable())

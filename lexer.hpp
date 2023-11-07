@@ -37,7 +37,6 @@ namespace cat
         auto is_punctuator() const -> bool;
         auto is_variable() const -> bool;
     };
-
-} // namespace cat
+}
 
 #endif // LEXER_H_

@@ -21,15 +21,15 @@ namespace cat
         interpreter(std::ostream &output) : m_output(output), m_variables({}), m_mode(MODES::DEC){};
         ~interpreter(){};
 
-        auto eval(node *node) -> void;
-        auto eval_expression(node *node_to_evaluate) -> int;
+        auto eval(node *node)                           -> int;
+        auto eval_expression(node *node_to_evaluate)    -> int;
 
     private:
         std::unordered_map<std::string, std::int32_t> m_variables;
 
     private:
-        std::ostream &m_output;
-        MODES m_mode;
+        std::ostream    &m_output;
+        MODES           m_mode;
     };
 
 }
