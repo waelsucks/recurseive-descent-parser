@@ -1,14 +1,6 @@
-config dec
-print 1 + 1
-print 3 + 3 * 3
-print ( 3 + 3 ) * 3
-x = 2 - -2
-y = x
-z = ( 16 * ( 1 + 2 ) )
-print x
-print y
+x = 2 * (2 + 3)
+y = x - 10
+z = y + x + 5
+
 print z
-config hex
-print z
-config bin
-print z
+print f

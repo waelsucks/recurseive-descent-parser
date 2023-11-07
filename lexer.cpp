@@ -35,12 +35,6 @@ namespace cat
         // Whitespace
         if (is_whitespace())
             consume_space();
-        // {
-        //     while (has_next() && is_whitespace())
-        //         value += peak_consume();
-
-        //     return token(token_type::TOKEN_WHITESPACE, value);
-        // }
 
         // Operator
         if (is_operator())

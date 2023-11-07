@@ -26,54 +26,85 @@ namespace cat
             {
                 // Print statements. Evaluate right side of expression
 
-                if (node->m_arg->type == NODE_TYPE::VARIABLE_NODE) 
-                {
-                    // If argument of print statement is a variable, print the value of the variable
-
-                    assignment_node *right_variable = dynamic_cast<assignment_node *>(node->m_arg);
-
-                    auto value = m_variables[right_variable->m_variable_name];
-
-                    if (m_mode == MODES::HEX)
-                        std::cout << "cat: 0x" << std::hex << value << std::endl;
-                    else if (m_mode == MODES::DEC)
-                        std::cout << "cat: " << std::dec << value << std::endl;
-                    else if (m_mode == MODES::BIN)
-                        std::cout << "cat: " << std::bitset<8>(value) << std::endl;
-
-                    // std::cout << "cat: " << m_variables[right_variable->m_variable_name] << std::endl;
-                    return;
-                }
-
-                auto value = node->m_arg->evaluate();
+                auto result = eval_expression(node->m_arg);
 
                 if (m_mode == MODES::HEX)
-                    std::cout << "cat: 0x" << std::hex << value.value << std::endl;
+                    std::cout << "cat: 0x" << std::hex << result << std::endl;
                 else if (m_mode == MODES::DEC)
-                    std::cout << "cat: " << std::dec << value.value << std::endl;
+                    std::cout << "cat: " << std::dec << result << std::endl;
                 else if (m_mode == MODES::BIN)
-                    std::cout << "cat: " << std::bitset<8>(std::stoi(value.value)) << std::endl;
+                    std::cout << "cat: " << std::bitset<8>(result) << std::endl;
             }
         }
 
-        if (input_node->type == NODE_TYPE::VARIABLE_NODE)
+        if (input_node->type == NODE_TYPE::ASSIGNMENT_NODE)
         {
             assignment_node *node = dynamic_cast<assignment_node *>(input_node);
+            auto args = eval_expression(node->m_value);
 
-            if (node->m_value->type == NODE_TYPE::VARIABLE_NODE)
+            m_variables[node->m_variable_name] = args;
+        }
+    }
+
+    auto interpreter::eval_expression(node *node_to_evaluate) -> int
+    {
+        auto arg_type = node_to_evaluate->type;
+
+        if (arg_type == NODE_TYPE::VARIABLE_NODE)
+        {
+
+            // If variable is not defined, throw an error
+
+            if (m_variables.find(node_to_evaluate->evaluate().value) == m_variables.end())
             {
+                
+                std::string error = "ERROR: " + node_to_evaluate->evaluate().value + " not defined";
+                throw std::runtime_error(error);
 
-                assignment_node *right_variable = dynamic_cast<assignment_node *>(node->m_value);
-                m_variables[node->m_variable_name] = m_variables[right_variable->m_variable_name];
-
-                return;
             }
 
-            
 
-            auto value = node->evaluate();
-            m_variables[node->m_variable_name] = std::stoi(value.value);
+            auto variable_node_to_evaluate = dynamic_cast<variable_node *>(node_to_evaluate);
+            return m_variables[variable_node_to_evaluate->m_variable_name];
         }
+
+        if (arg_type == NODE_TYPE::ADDITION_NODE ||
+            arg_type == NODE_TYPE::SUBTRACTION_NODE ||
+            arg_type == NODE_TYPE::MULTIPLICATION_NODE ||
+            arg_type == NODE_TYPE::DIVITION_NODE)
+        {
+            auto addition_node_to_evaluate = static_cast<addition_node *>(node_to_evaluate);
+
+            auto left = addition_node_to_evaluate->left;
+            auto right = addition_node_to_evaluate->right;
+
+            auto left_value = eval_expression(left);
+            auto right_value = eval_expression(right);
+
+            switch (arg_type)
+            {
+            case NODE_TYPE::ADDITION_NODE:
+                return left_value + right_value;
+                break;
+
+            case NODE_TYPE::SUBTRACTION_NODE:
+                return left_value - right_value;
+                break;
+
+            case NODE_TYPE::MULTIPLICATION_NODE:
+                return left_value * right_value;
+                break;
+
+            case NODE_TYPE::DIVITION_NODE:
+                return left_value / right_value;
+                break;
+
+            default:
+                break;
+            }
+        }
+
+        return std::stoi(node_to_evaluate->evaluate().value);
     }
 
 }
