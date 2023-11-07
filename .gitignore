@@ -1,0 +1,13 @@
+# C++ compiled output
+*.out
+*.o
+*.obj
+
+# CMake build directory
+build/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
