@@ -1,7 +1,7 @@
 # Recursive Descent Parser
 
 ## Description
-This project is a simple implementation of a recursive descent parser. It is designed to parse and interpret mathematical expressions.
+This project is a simple implementation of a recursive descent parser. It is designed to parse and interpret the C@ language.
 
 ## Features
 - Mathematical expressions
